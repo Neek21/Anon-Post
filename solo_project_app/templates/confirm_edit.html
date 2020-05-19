@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Authentication</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'imgs/favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/solar/bulmaswatch.min.css">
+</head>
+<body class="main">
+    <div class="container is-fluid">
+      <section class="section">
+        <div class="container has-text-centered">
+          <div class="columns is-centered">
+            <div class="column is-5 is-4-desktop">
+              {% if messages %}
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }} has-text-danger"{% endif %}>{{ message }}</li>    
+                    {% endfor %}
+                </ul>
+              {% endif %}
+              <form action="/edit_auth" method="POST">
+                {% csrf_token %}
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="password" name="password" id="password" placeholder="Passowrd">
+                  </div>
+                </div>
+                <div class="field">
+                  <button class="button is-primary is-fullwidth">Confirm Password</button>
+                </div>
+                <a href="/profile">Profile</a>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <br>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          Website created by Nico Carreon using <a href="https://www.djangoproject.com/">Django</a> and <a href="https://bulma.io/">Bulma</a>.
+        </p>
+      </div>
+    </footer>
+</body>
+</html>

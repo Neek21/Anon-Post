@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'imgs/favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/solar/bulmaswatch.min.css">
+
+</head>
+<body class="main">
+    <div class="container is-fluid">
+        <div class="block">
+            <section class="hero is-primary">
+                <div class="hero-body">
+                    <figure class="image is-128x128 float-left">
+                        <img src="{% static 'imgs/icon.png' %}" alt="Drawing of a person talking.">
+                    </figure>
+                    <div class="container has-text-centered">
+                        <h1 class="title has-text-centered">Welcome</h1>
+                    </div>
+                    <div class="navbar"> 
+                        <div class="navbar-menu navbar-end float-right">
+                            <a class="navbar-item"href="/profile">Profile</a><a class="navbar-item" href="/logout">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    
+        <form class="box" action="/post_process" method="POST">
+            {% if messages %}
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }} has-text-danger"{% endif %}>{{ message }}</li>    
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% csrf_token %}
+            <textarea class="textarea" name="post" id="" cols="30" rows="5" placeholder="Say somethin"></textarea>
+            <br>
+            <div class="has-text-centered">
+                <input class="button is-primary is-medium" type="submit" value="Post">
+            </div>
+        </form>
+        {% for post in posts %}
+            <div class="container has-text-centered box">
+                <p class="title is-4">{{ post.post }}</p>
+                <p>Likes: {{ post.user_likes.count }} 
+                    <a href="/like/{{post.id}}">
+                        <span class="icon">
+                            <i class="far fa-thumbs-up"></i>
+                        </span>
+                    </a>
+                    <a href="/unlike/{{post.id}}">
+                        <span class="icon">
+                            <i class="far fa-thumbs-down"></i>
+                        </span>
+                    </a>
+                </p>
+                <p>Comments: {{post.post_comments.count}}</p>
+                <div class="buttons is-centered">
+                    <a class="button is-info is-small is-outlined" href="/view_post/{{post.id}}">View Post</a>
+                    {% if post.poster.id == request.session.id %}
+                        <a class="button is-danger is-small is-outlined" href="confirm_delete/{{post.id}}">Delete</a>
+                    {% else %}
+                        <a href=""></a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        
+    </div>
+    <br>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+            Website created by Nico Carreon using <a href="https://www.djangoproject.com/">Django</a> and <a href="https://bulma.io/">Bulma</a>.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
